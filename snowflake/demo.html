@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>雪花</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            border: 0;
+            overflow: hidden;
+        }
+        body{
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script>
+        var minSize = 5;//雪花的最小尺寸
+        var maxSize = 50;//雪花的最大尺寸
+        var newOn = 300;//每过多长时间产生一个雪花
+        var flake =$("<div></div>").css("position","absolute").html("❉");//雪花的样式
+
+        $(function () {
+            setInterval(function () {
+                var Ww = $(document).width();//浏览器的宽度
+                var Wh = $(document).height();//浏览器的高度
+                var startLeft = Math.random() * Ww;//雪花一开始距离浏览器的间距
+                var endLeft = Math.random() * Ww;//雪花下落后距离浏览器的间距
+                var flakeSize = minSize + maxSize * Math.random();//雪花的大小
+                var flakeOpacity = 0.7 + Math.random() * 0.3;//雪花产生是的透明度
+                var flakeEndOpacity = 0.5 + Math.random() *0.3;//雪花下落后的透明度
+                var durationTime = 3000 * Math.random() + 10 * Wh;//雪花下落的时间
+                flake.clone().appendTo($('body')).css({
+                    "left": startLeft,
+                    "font-size": flakeSize,
+                    "opacity": flakeOpacity,
+                    "color": "#fff",
+                    "top": "-55px"
+                }).animate({
+                    "left": endLeft,
+                    "opacity": flakeEndOpacity,
+                    "top": Wh
+                }, durationTime, function () {
+                    $(this).remove();
+                })
+            }, newOn)
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>气泡</title>
+    <style>
+        body,html{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="cav"></canvas>
+    <script>
+        window.onload = function () {
+            var cav = document.getElementById('cav');
+            var ctx = cav.getContext('2d');
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            cav.width = winW;
+            cav.height = winH;
+            var ball = [];
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, cav.width, cav.height);
+            setInterval(function () {
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, 0, cav.width, cav.height);
+                for(var i = 0; i < ball.length; i++){
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.fillStyle = ball[i].randomColor(ball[i].r, ball[i].g, ball[i].b, ball[i].opacity);
+                    ctx.moveTo(ball[i].x, ball[i].y);
+                    ctx.arc(ball[i].x, ball[i].y, ball[i].radius, 0, 360 * Math.PI / 180, false);
+                    ctx.fill();
+                    ctx.closePath();
+                    ctx.restore();
+                    ball[i].x += ball[i].speedX;
+                    ball[i].y += ball[i].speedY;
+                    ball[i].opacity = (ball[i].opacity - 0.015).toPrecision(3);
+                    if (ball[i].opacity < 0) {
+                        ball.splice(i, 1);
+                    }
+                }
+            }, 16);
+
+            cav.onmousemove = function (ev) {
+                var e = ev || window.event;
+                for(var i =0; i < 5; i++){
+                    ball.push({
+                        x: e.clientX - cav.offsetLeft,
+                        y: e.clientY - cav.offsetTop,
+                        radius: Math.floor(Math.random() * 12+1),
+                        r: Math.floor(Math.random() * 256),
+                        g: Math.floor(Math.random() * 256),
+                        b: Math.floor(Math.random() * 256),
+                        opacity: Math.random() * 2 - 0.3,
+                        randomColor: function (r, g, b, opacity) {
+                            return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
+                        },
+                        speedX: (Math.random() * 11 +(-5)) / 1.5,
+                        speedY: -(e.clientY - cav.offsetTop) / 50
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
